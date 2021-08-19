@@ -7,7 +7,7 @@ You can also train the model in an equivalent local environment.
 
 1) Load the data 
 
-    In the very first step we upload the given csv file to google drive. The csv file is called dataset.csv. Instead of using google drive you can also upload the data directly to colab. However, when using colab you need to upload the data every single time you start using colab. The code below uses google drive. Please make sure to upload the csv file directly to google drive. Do not choose an existing folder. Follow the introduction video (erneut das Video verlinken...) for how to upload a file to colab.
+    In the very first step we upload the given csv file to google drive. The csv file is called dataset.csv. Instead of using google drive you can also upload the data directly to colab. However, when using colab you need to upload the data every single time you start using colab. The code below uses google drive. Please make sure to upload the csv file directly to google drive. Do not choose an existing folder. Follow the introduction video (erneut das Video verlinken..) for how to upload a file to colab.
     The following code loads the data into colab and initializes it to a dataframe. 
     
     ```python
