@@ -170,4 +170,28 @@ The picture below illustrates the process of the model development. After the da
     
     The download can be done from the left sidebar. To do so, click on the three dots and choose download. 
 
+## Converting Model to TinyML
+
+1) Load the Tensorflow Model 
+
+    After generating the model, we convert the model to a TinyML. TinyML enables on-device machine learning by running the model on an embedded device with only few kilobytes of memory.
+    Firstly, we need to set the environment and load the model. If the model was just built and saved, the model is already uploaded to Colab. Otherwise the models needs to be uploaded to the following path: "/content/". Make sure the model is named IR_Sensor.h5. While converting the model you need to use h5py<3.0. After the installation you will be prompted to restart the runtime. Please note, that all variabels are now unknown. Run the cells again to know all the necessary variables and libraries (e.g. numpy). 
+    
+    ```python
+    import tensorflow as tf 
+    from tensorflow import keras
+    !pip install 'h5py<3.0.0'
+
+    model = keras.models.load_model("/content/IR_Sensor.h5")
+    ```
+
+2) Convert the model 
+
+    Secondly, we convert the model by using the TFLiteConverter. The tflite model is saved as IR_Sensor.tflite.
+
+    ```python
+    converter = tf.lite.TFLiteConverter.from_keras_model(model)
+    tflite_model=converter.convert() 
+    open('IR_Sensor.tflite', 'wb').write(tflite_model)
+    ```
 
