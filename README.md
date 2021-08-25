@@ -1,6 +1,6 @@
 # Tiny-ML IR-Sensor
 
-The source code for building a machine learning model is presented below. The model is created in Python using [Colab](https://colab.research.google.com). Before you can start using the source code, you need to get a free google account. Follow the introduction video linked below to get a first impression of Colab (link the video...). If you need further information check out the following [link](https://towardsdatascience.com/getting-started-with-google-colab-f2fff97f594c).
+The source code for building a machine learning model is presented below. The model is created in Python using [Colab](https://colab.research.google.com). Before you can start using the source code, you need to get a free google account. Follow the [introduction video](https://www.ssv-embedded.de/downloads/videos/howto_colab_en.mp4) to get a first impression of Colab. If you need further information check out the following [link](https://towardsdatascience.com/getting-started-with-google-colab-f2fff97f594c).
 You can also train the model in an equivalent local environment. 
 
 ## Workflow 
