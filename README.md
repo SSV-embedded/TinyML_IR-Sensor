@@ -131,4 +131,43 @@ The picture below illustrates the process of the model development. After the da
     )
     ```
 
+3) Train the Model
+
+    For training the model we need to select the validation split, the number of epochs and the batch size. A validation set helds data back from training. A validation split of 20% means that 20% of the training set is used as a validation set. Therefore a validation split is used to predict overfitting or underfitting. The number of epochs describes the number of times the model iterates over the entire train_dataset and train_label data for training. We set the number of epochs to 20 because we already get some decent results. The batch size decribes the number of samples after which the parameters are updated while training. 
+    ```python 
+    history = model.fit(
+    train_dataset,
+    to_categorical(train_labels),
+    validation_split=0.2, 
+    epochs = 20, 
+    batch_size = 32, 
+    )
+    ```
+4) Model Evaluation 
+
+    After training the model we need to start evaluating. 
+
+     ```python 
+       model.evaluate(
+        test_dataset, 
+        to_categorical(test_labels)
+        ) 
+    ```
+
+    Further we can observe that the training and validation loss are both decreasing. This means the model is not overfitting. 
+
+    ![alt-text][Overfitting]
+
+    [Overfitting]: https://github.com/SSV-embedded/TinyML_IR-Sensor/blob/329b5ede15fda248bdcc4f9059d8aacb4937d371/Overfitting.png
+
+5) Save the model 
+
+    The next step saves the model. Saving the model in Colab allows you to download the model later on. 
+
+     ```python 
+        model.save("/content/IR_Sensor.h5")
+    ```
+    
+    The download can be done from the left sidebar. To do so, click on the three dots and choose download. 
+
 
