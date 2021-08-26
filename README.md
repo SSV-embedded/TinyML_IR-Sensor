@@ -195,4 +195,69 @@ The picture below illustrates the process of the model development. After the da
     tflite_model=converter.convert() 
     open('IR_Sensor.tflite', 'wb').write(tflite_model)
     ```
+## Classification 
 
+1) Load validation data 
+
+    In order to validate the model we need validation data.  The data shape of the validation data must correspond to that of the model. The csv-file data.csv holds a single temperature array.  
+
+    ```python 
+    url = "/content/drive/MyDrive/data.csv"
+
+    names = ["Date, "data0", "data1", "data2", "data3", "data4", "data5", "data6", \
+         "data7", "data8", "data9", "data10", "data11", "data12", "data13", "data14", \
+         "data15", "data16", "data17", "data18", "data19", "data20", "data21", "data22", \
+         "data23", "data24", "data25", "data26", "data27", "data28", "data29", "data30", \
+         "data31", "data32", "data33", "data34", "data35", "data36", "data37", "data38", \
+         "data39", "data40", "data41", "data42", "data43", "data44", "data45", "data46",\
+         "data47", "data48", "data49", "data50", "data51", "data52", "data53", "data54", \
+         "data55", "data56", "data57", "data58", "data59", "data60", "data61", "data62", \
+         "data63"]
+
+    input = 64 
+
+    df_val = pd.read_csv(url, header=None, names=names, parse_dates=True, sep=',')
+    df_val["Date"] = pd.to_datetime(df_val["Date"]) 
+    df_val.index = df_val["Date"]
+    del df_val["Date"]
+
+    val_data = np.array(df_val, dtype = np.float32 )
+    val_data = np.reshape(val_data, (1,input))
+    ```
+    As the training data and testing data is normalized, the validation data must be normalized, before an inference is performed. During the data normalization, the minimum and maximum of the entire data set is determined. At this point, the min and max values must be inserted in order to be able to use the model independently. Using the given dataset, min is set to 21.75 and max to 51.0. 
+
+    ```python
+    min = 21.75
+    max = 51.0
+    val= (val_data - min) / (max - min) 
+    ```
+
+    
+2) Using the TinyML Model
+
+    Next you can start to execute inferences. Make sure that the data shape matches the models input shape (input_details). 
+
+    ```python 
+    interpreter = tf.lite.Interpreter(model_path="IR_Sensor.tflite")
+    interpreter.allocate_tensors()
+
+    input_details = interpreter.get_input_details()
+    output_details = interpreter.get_output_details()
+
+    interpreter.set_tensor(interpreter.get_input_details()[0]["index"], val)
+    interpreter.invoke()
+    output = interpreter.get_tensor(output_details[0]['index'])
+
+    pred = np.argmax(output)
+    ```
+    The model output are according to the sigmoid function two probability values. Using argmax the maximum is determined. Therefore the predicted class is stored in pred.
+
+
+    Lastely, we link the prediction with the timestamp.
+    ```python 
+    ts = np.array(df_val.index)
+    prediction = pd.DataFrame({'Date':ts, 'Prediction': pred_tiny}) 
+    prediction["Date"] = pd.to_datetime(prediction["Date"]) 
+    prediction.index = prediction["Date"]
+    del prediction["Date"]
+    ```
