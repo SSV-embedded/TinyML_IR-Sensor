@@ -7,7 +7,8 @@ You can also train the model in an equivalent local environment.
 The picture below illustrates the process of the model development. After the data is generated with the sensor, the data will be written to a CSV file via Node-RED. The label is also added to the dataset via Node-RED. In the next step the CSV file will be uploaded to Colab and the model is trained. After training, the model will be converted into a TinyML. The Tiny ML can be used to classify new sensor data via Colab. In the following the steps are described in detail. 
 
 ![alt-text][Workflow]
-[Workflow]: 
+
+[Workflow]:https://github.com/SSV-embedded/TinyML_IR-Sensor/blob/a5494b170d3581f9285f0866d75013db1f8a9902/Workflow.png
 
 ## Data Preparation 
 
