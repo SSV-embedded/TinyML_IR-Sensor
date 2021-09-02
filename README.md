@@ -14,11 +14,32 @@ The picture below illustrates the process of the model development. After the da
 
 1) Load the data 
 
-    In the very first step we upload the given csv file to google drive. The csv file is called dataset.csv. Instead of using google drive you can also upload the data directly to colab. However, when using colab you need to upload the data every single time you start using colab. The code below uses google drive. Please make sure to upload the csv file directly to google drive. Do not choose an existing folder. Follow the introduction video (erneut das Video verlinken..) for how to upload a file to colab.
+    Before loading the data, we need to set the environment as follows and install TensorFlow. This might take a while. Please be patient.
+
+    ```python 
+    !pip install tensorflow==2.0.0-beta0 
+    import tensorflow as tf
+    ```
+    You might get the following error, which can be neglected:
+
+    `ERROR: pip's dependency resolver does not currently take into account all the packages that are installed. This behaviour is the source of the following dependency conflicts.
+    kapre 0.3.5 requires tensorflow>=2.0.0, but you have tensorflow 2.0.0b0 which is incompatible.`
+
+    Moreover we need to load the necessary libraries. 
+
+    ```python 
+    %matplotlib inline
+    import pandas as pd
+    import matplotlib.pyplot as plt
+    from datetime import datetime
+    ```
+    In the very first step we upload the given csv file to google drive. The csv file is called dataset.csv. Instead of using google drive you can also upload the data directly to colab. However, when using colab you need to upload the data every single time you start using colab. The code below uses google drive. Please make sure to upload the csv file directly to google drive. Do not choose an existing folder. Follow the [introduction video](https://www.ssv-embedded.de/downloads/videos/howto_colab_en.mp4) for how to upload a file to colab. Uploading the csv file to google drive or colab is useful if you want to upload your own csv file. If you are using the given csv file, which is uploaded to github, you can also use the second link. Right now the link is commented out. Before using the Github link, you need to delet the # and place it before the first `url`. 
     The following code loads the data into colab and initializes it to a dataframe. 
     
     ```python
     url = "/content/drive/MyDrive/dataset.csv"
+    #url = 'https://raw.githubusercontent.com/SSV-embedded/TinyML_IR-Sensor/main/dataset.csv'
+
 
     names = ["Date", "data0", "data1", "data2", "data3", "data4", "data5", "data6", \
          "data7", "data8", "data9", "data10", "data11", "data12", "data13", "data14", \
@@ -48,7 +69,7 @@ The picture below illustrates the process of the model development. After the da
 
 2) Seperate the labels 
 
-    Moreover we separate the labels from the dataset. Df holds the temperature values and df_label holds 
+    Moreover we separate the labels from the dataset. `Df` holds the temperature values and `df_label` holds 
     the labels. Both dataframes contain the timestamps. 
 
     ```python 
@@ -66,13 +87,34 @@ The picture below illustrates the process of the model development. After the da
     
     [Bild]: https://github.com/SSV-embedded/TinyML_IR-Sensor/blob/2cf61b172882a23991e954e01e803f0b2f337289/Bild_Github.png
  
+    The following code is used to generate the picture above. Set `row` to the row number you want to visualize. 
+
+    ```python 
+    import numpy as np 
+    row = 2
+    data =df[row:row+1]
+    data = np.array(data, dtype = np.float32 )
+
+    i_size=np.sqrt(data.size)
+    i_size=np.array(i_size, dtype=np.int)
+    data = np.reshape(data, (i_size, i_size))
+
+
+    plt.imshow(data, interpolation='nearest')
+    plt.title('Data visualization')
+    plt.colorbar()
+    plt.show()
+    ```
+
 4) Normalite the Data
 
-    Before the data can be split into a training and testing dataset, the data needs to be normalized. Therefor, the maximum and the minimum of the entire data frame must be determined.
+    Before the data can be split into a training and testing dataset, the data needs to be normalized. Therefor, the maximum and the minimum of the entire data frame must be determined. Using the given csv file the minimum should be 21.75 and the maximum 51.0.
     
     ```python 
     min = df.min().min()
     max = df.max().max()
+    print("min:", min)
+    print("max:", max)
     ``` 
     In order to normalize the dataframe we use the following equation: (x - min ) / (max - min).
     
@@ -86,7 +128,7 @@ The picture below illustrates the process of the model development. After the da
 5) Split Data into Subsets 
 
 
-    Following the data is split into a training and testing dataset. The training dataset is used to train the machine learning model. The testing dataset evaluates the trained machine learning model. We set random_state=0 to enable reproducibility. This is necessary, because the temperature values and the labels are already in two different datasets. Random_state=0 makes sure that index of train_dataset and test_dataset fit the index order of train_labels and test_labels. 80% of the data belong to the train_dataset. 20% of the data belong to the test_dataset. 
+    Following the data is split into a training and testing dataset. The training dataset is used to train the machine learning model. The `testing_dataset` evaluates the trained machine learning model. We set `random_state=0` to enable reproducibility. This is necessary, because the temperature values and the labels are already in two different datasets. `Random_state=0` makes sure that index of `train_dataset` and `test_dataset` fit the index order of `train_labels` and `test_labels`. 80% of the data belong to the `train_dataset`. 20% of the data belong to the `test_dataset`. 
     
     ```python 
     #Set Dataset 
@@ -125,23 +167,23 @@ The picture below illustrates the process of the model development. After the da
     ```python 
     from tensorflow.keras.optimizers import Adam
 
-    model.compile(
-    optimizer=Adam(lr= 0.005), 
-    loss = 'categorical_crossentropy', 
-    metrics = ['accuracy'],
+        model.compile(
+        optimizer=Adam(lr= 0.005), 
+        loss = 'categorical_crossentropy', 
+        metrics = ['accuracy'],
     )
     ```
 
 3) Train the Model
 
-    For training the model we need to select the validation split, the number of epochs and the batch size. A validation set helds data back from training. A validation split of 20% means that 20% of the training set is used as a validation set. Therefore a validation split is used to predict overfitting or underfitting. The number of epochs describes the number of times the model iterates over the entire train_dataset and train_label data for training. We set the number of epochs to 20 because we already get some decent results. The batch size decribes the number of samples after which the parameters are updated while training. 
+    For training the model we need to select the validation split, the number of epochs and the batch size. A validation set helds data back from training. A validation split of 20% means that 20% of the training set is used as a validation set. Therefore a validation split is used to predict overfitting or underfitting. The number of epochs describes the number of times the model iterates over the entire `train_dataset` and `train_label` data for training. We set the number of epochs to 20 because we already get some decent results. The batch size decribes the number of samples after which the parameters are updated while training. 
     ```python 
     history = model.fit(
-    train_dataset,
-    to_categorical(train_labels),
-    validation_split=0.2, 
-    epochs = 20, 
-    batch_size = 32, 
+        train_dataset,
+        to_categorical(train_labels),
+        validation_split=0.2, 
+        epochs = 20, 
+        batch_size = 32, 
     )
     ```
 4) Model Evaluation 
@@ -152,7 +194,7 @@ The picture below illustrates the process of the model development. After the da
        model.evaluate(
         test_dataset, 
         to_categorical(test_labels)
-        ) 
+    ) 
     ```
 
     Further we can observe that the training and validation loss are both decreasing. This means the model is not overfitting. 
@@ -160,6 +202,22 @@ The picture below illustrates the process of the model development. After the da
     ![alt-text][Overfitting]
 
     [Overfitting]: https://github.com/SSV-embedded/TinyML_IR-Sensor/blob/329b5ede15fda248bdcc4f9059d8aacb4937d371/Overfitting.png
+
+    The following code is used to generate the picture above. 
+
+    ```python 
+    loss = history.history['loss']
+    val_loss = history.history['val_loss']
+    epochs= range(1,len(loss)+1)
+
+    plt.plot(epochs, loss, 'g.', label= 'Training loss')
+    plt.plot(epochs, val_loss, 'b.', label='Validation loss')
+    plt.title('Training and validation loss')
+    plt.xlabel('Epochs')
+    plt.ylabel('Loss')
+    plt.legend() 
+    plt.show() 
+    ```
 
 5) Save the model 
 
@@ -176,7 +234,7 @@ The picture below illustrates the process of the model development. After the da
 1) Load the Tensorflow Model 
 
     After generating the model, we convert the model to a TinyML. TinyML enables on-device machine learning by running the model on an embedded device with only few kilobytes of memory.
-    Firstly, we need to set the environment and load the model. If the model was just built and saved, the model is already uploaded to Colab. Otherwise the models needs to be uploaded to the following path: "/content/". Make sure the model is named IR_Sensor.h5. While converting the model you need to use h5py<3.0. After the installation you will be prompted to restart the runtime. Please note, that all variabels are now unknown. Run the cells again to know all the necessary variables and libraries (e.g. numpy). 
+    Firstly, we need to set the environment and load the model. If the model was just built and saved, the model is already uploaded to Colab. Otherwise the models needs to be uploaded to the following path: `/content/`. Make sure the model is named `IR_Sensor.h5`. While converting the model you need to use `h5py<3.0`. After the installation you will be prompted to restart the runtime. Please note, that all variabels are now unknown. Run the cells again to know all the necessary variables and libraries (e.g. numpy). 
     
     ```python
     import tensorflow as tf 
@@ -188,7 +246,7 @@ The picture below illustrates the process of the model development. After the da
 
 2) Convert the model 
 
-    Secondly, we convert the model by using the TFLiteConverter. The tflite model is saved as IR_Sensor.tflite.
+    Secondly, we convert the model by using the TFLiteConverter. The tflite model is saved as `IR_Sensor.tflite`.
 
     ```python
     converter = tf.lite.TFLiteConverter.from_keras_model(model)
@@ -199,9 +257,11 @@ The picture below illustrates the process of the model development. After the da
 
 1) Load validation data 
 
-    In order to validate the model we need validation data.  The data shape of the validation data must correspond to that of the model. The csv-file data.csv holds a single temperature array.  
+    In order to validate the model we need validation data.  The data shape of the validation data must correspond to that of the model. The csv-file `data.csv` holds a single temperature array.  
 
     ```python 
+    import numpy as np 
+    import pandas as pd
     url = "/content/drive/MyDrive/data.csv"
 
     names = ["Date, "data0", "data1", "data2", "data3", "data4", "data5", "data6", \
@@ -235,7 +295,7 @@ The picture below illustrates the process of the model development. After the da
     
 2) Using the TinyML Model
 
-    Next you can start to execute inferences. Make sure that the data shape matches the models input shape (input_details). 
+    Next you can start to execute inferences. Make sure that the data shape matches the models input shape (`input_details`). 
 
     ```python 
     interpreter = tf.lite.Interpreter(model_path="IR_Sensor.tflite")
@@ -250,10 +310,10 @@ The picture below illustrates the process of the model development. After the da
 
     pred = np.argmax(output)
     ```
-    The model output are according to the sigmoid function two probability values. Using argmax the maximum is determined. Therefore the predicted class is stored in pred.
+    The model output are according to the sigmoid function two probability values. Using argmax the maximum is determined. Therefore the predicted class is stored in `pred`.
 
 
-    Lastely, we link the prediction with the timestamp.
+    Lastely, we link the `prediction` with the timestamp.
     ```python 
     ts = np.array(df_val.index)
     prediction = pd.DataFrame({'Date':ts, 'Prediction': pred_tiny}) 
