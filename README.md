@@ -40,7 +40,6 @@ The picture below illustrates the process of the model development. After the da
     url = "/content/drive/MyDrive/dataset.csv"
     #url = 'https://raw.githubusercontent.com/SSV-embedded/TinyML_IR-Sensor/main/dataset.csv'
 
-
     names = ["Date", "data0", "data1", "data2", "data3", "data4", "data5", "data6", \
          "data7", "data8", "data9", "data10", "data11", "data12", "data13", "data14", \
          "data15", "data16", "data17", "data18", "data19", "data20", "data21", "data22", \
