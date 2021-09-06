@@ -4,7 +4,7 @@ The source code for building a machine learning model is presented below. The mo
 You can also train the model in an equivalent local environment. 
 
 ## Workflow 
-The picture below illustrates the process of the model development. After the data is generated with the sensor, the data will be written to a CSV file via Node-RED. The label is also added to the dataset via Node-RED. In the next step the CSV file will be uploaded to Colab and the model is trained. After training, the model will be converted into a TinyML. The Tiny ML can be used to classify new sensor data via Colab. In the following the steps are described in detail. 
+The picture below illustrates the process of the model development. After the data is generated with the sensor, the data will be written to a CSV file via Node-RED. The label is also added to the dataset via Node-RED. In the next step the CSV file will be uploaded to Colab and the model is trained. After training, the model will be converted into a TinyML. The Tiny ML can be used to classify new sensor data via Colab. In the following the steps are described in detail. An example on how to capture data can be found [here](https://github.com/sze-ssv/Capture_Data). 
 
 ![alt-text][Workflow]
 
