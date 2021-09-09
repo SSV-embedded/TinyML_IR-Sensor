@@ -16,10 +16,10 @@ The picture below illustrates the process of the model development. After the da
 
 Before loading the data, we need to set the environment as follows and install TensorFlow. This might take a while. Please be patient.
 
-    ```python 
-    !pip install tensorflow==2.0.0-beta0 
-    import tensorflow as tf
-    ```
+```python 
+!pip install tensorflow==2.0.0-beta0 
+import tensorflow as tf
+```
 You might get the following error, which can be neglected:
 
     `ERROR: pip's dependency resolver does not currently take into account all the packages that are installed. This behaviour is the source of the following dependency conflicts.
@@ -27,12 +27,12 @@ You might get the following error, which can be neglected:
 
 Moreover we need to load the necessary libraries. 
 
-    ```python 
-    %matplotlib inline
-    import pandas as pd
-    import matplotlib.pyplot as plt
-    from datetime import datetime
-    ```
+```python 
+%matplotlib inline
+import pandas as pd
+import matplotlib.pyplot as plt
+from datetime import datetime
+```
 In the very first step we upload the given csv file to google drive. The csv file is called dataset.csv. Instead of using google drive you can also upload the data directly to colab. However, when using colab you need to upload the data every single time you start using colab. The code below uses google drive. Please make sure to upload the csv file directly to google drive. Do not choose an existing folder. Follow the [introduction video](https://www.ssv-embedded.de/downloads/videos/howto_colab_en.mp4) for how to upload a file to colab. Uploading the csv file to google drive or colab is useful if you want to upload your own csv file. If you are using the given csv file, which is uploaded to github, you can also use the second link. Right now the link is commented out. Before using the Github link, you need to delet the # and place it before the first `url`. 
     The following code loads the data into colab and initializes it to a dataframe. 
     
@@ -154,8 +154,8 @@ To classify the temperature images, we use a rather simple Artifical Neural Netw
 
 ``` python 
 model = tf.keras.Sequential([
-layers.Dense(num_classes, activation = 'sigmoid', input_shape=(input,)),
-        ])
+    layers.Dense(num_classes, activation = 'sigmoid', input_shape=(input,)),
+])
 model.summary()
 ```
 
@@ -247,8 +247,8 @@ Secondly, we convert the model by using the TFLiteConverter. The tflite model is
 
 ```python
 converter = tf.lite.TFLiteConverter.from_keras_model(model)
-    tflite_model=converter.convert() 
-    open('IR_Sensor.tflite', 'wb').write(tflite_model)
+tflite_model=converter.convert() 
+open('IR_Sensor.tflite', 'wb').write(tflite_model)
 ```
 
 ## 4 Classification 
