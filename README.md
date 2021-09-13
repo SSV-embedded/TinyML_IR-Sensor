@@ -50,6 +50,9 @@ names = ["Date", "data0", "data1", "data2", "data3", "data4", "data5", "data6", 
          "data55", "data56", "data57", "data58", "data59", "data60", "data61", "data62", \
          "data63", "label"]
 
+num_classes=2
+input = 64 
+
 df = pd.read_csv(url, header=None, names=names, parse_dates=True, sep=',')    
 ```
     
@@ -274,6 +277,7 @@ data36", "data37", "data38", \
 "data55", "data56", "data57", "data58", "data59", "data60", "data61", "data62", \
 "data63"]
 
+num_classes=2
 input = 64 
 df_val = pd.read_csv(url, header=None, names=names, parse_dates=True, sep=',')
 df_val["Date"] = pd.to_datetime(df_val["Date"]) 
@@ -308,7 +312,7 @@ interpreter.set_tensor(interpreter.get_input_details()[0]["index"], val)
 interpreter.invoke()
 output = interpreter.get_tensor(output_details[0]['index'])
 
-pred = np.argmax(output)
+pred_tiny = np.argmax(output)
 ```
 The model output are according to the sigmoid function two probability values. Using argmax the maximum is determined. Therefore the predicted class is stored in `pred`.
 
@@ -320,4 +324,5 @@ prediction = pd.DataFrame({'Date':ts, 'Prediction': pred_tiny})
 prediction["Date"] = pd.to_datetime(prediction["Date"]) 
 prediction.index = prediction["Date"]
 del prediction["Date"]
+print(prediction)
 ```
