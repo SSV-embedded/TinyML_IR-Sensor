@@ -59,6 +59,7 @@ Instead of using the regular index we set the timestamp to the index.
 df["Date"] = pd.to_datetime(df["Date"]) 
 df.index = df["Date"]
 del df["Date"]
+print(df)
 ```
 
 After the first cell is executed, you expect the following output. If you receive a warning or error message, check if the file was added to the correct folder. 
