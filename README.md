@@ -110,7 +110,7 @@ plt.colorbar()
 plt.show()
 ```
 
-### 1.4 Normalite the Data
+### 1.4 Normalize the Data
 
 Before the data can be split into a training and testing dataset, the data needs to be normalized. Therefor, the maximum and the minimum of the entire data frame must be determined. Using the given csv file the minimum should be 21.75 and the maximum 51.0.
     
