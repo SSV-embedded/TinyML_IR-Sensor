@@ -2,6 +2,7 @@
 
 The source code for building a machine learning model is presented below. The model is created in Python using [Colab](https://colab.research.google.com). Before you can start using the source code, you need to get a free google account. Follow the [introduction video](https://www.ssv-embedded.de/downloads/videos/howto_colab_en.mp4) to get a first impression of Colab. If you need further information check out the following [link](https://towardsdatascience.com/getting-started-with-google-colab-f2fff97f594c).
 You can also train the model in an equivalent local environment. 
+Check out the following [video](enter link.. ) to get an idea on how to run the code with colab. 
 
 ## Workflow 
 The picture below illustrates the process of the model development. After the data is generated with the sensor, the data will be written to a CSV file via Node-RED. The label is also added to the dataset via Node-RED. In the next step the CSV file will be uploaded to Colab and the model is trained. After training, the model will be converted into a TinyML. The Tiny ML can be used to classify new sensor data via Colab. In the following the steps are described in detail. An example on how to capture data can be found [here](https://github.com/sze-ssv/Capture_Data). 
@@ -326,3 +327,5 @@ prediction.index = prediction["Date"]
 del prediction["Date"]
 print(prediction)
 ```
+
+
